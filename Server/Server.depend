@@ -1,0 +1,13 @@
+# depslib dependency file v1.0
+1583559146 source:/home/roy/Desktop/TCI/Tarea-Corta-I/Server/main.cpp
+	<iostream>
+	<sys/types.h>
+	<unistd.h>
+	<sys/socket.h>
+	<netdb.h>
+	<arpa/inet.h>
+	<string.h>
+	<string>
+	<limits.h>
+	<stdio.h>
+

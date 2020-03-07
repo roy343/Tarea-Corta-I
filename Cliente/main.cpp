@@ -9,17 +9,19 @@
 
 using namespace std;
 
+//Funcion main del cliente
 int main()
 {
-    //	Create a socket
+    // Se crea un socket para el cliente
     int sock = socket(AF_INET, SOCK_STREAM, 0);
     if (sock == -1)
     {
         return 1;
     }
 
-    //	Create a hint structure for the server we're connecting with
+    //	Se define el puerto al cual se va a conectar
     int port = 54000;
+    // Se pone el IP de la maquina
     string ipAddress = "127.0.0.1";
 
     sockaddr_in hint;
@@ -27,46 +29,46 @@ int main()
     hint.sin_port = htons(port);
     inet_pton(AF_INET, ipAddress.c_str(), &hint.sin_addr);
 
-    //	Connect to the server on the socket
+    // Se conecta al socket
     int connectRes = connect(sock, (sockaddr*)&hint, sizeof(hint));
     if (connectRes == -1)
     {
         return 1;
     }
 
-    //	While loop:
+    //	Ciclo while que le envia los mensajes al server
     char buf[4096];
     string userInput;
 
 
     do {
-        //		Enter lines of text
-        cout << "> ";
+        //	Ingresar datos
+        cout << "Ingrese el vertice de origen ";
         getline(cin, userInput);
 
         //		Send to server
         int sendRes = send(sock, userInput.c_str(), userInput.size() + 1, 0);
         if (sendRes == -1)
         {
-            cout << "Could not send to server! Whoops!\r\n";
+            cout << "No se pudo contactar con servidor \r\n";
             continue;
         }
 
-        //		Wait for response
+        // Se espera por una respuesta por parte del servidor
         memset(buf, 0, 4096);
-        int bytesReceived = recv(sock, buf, 4096, 0);
-        if (bytesReceived == -1)
+        int data = recv(sock, buf, 4096, 0);
+        if (data == -1)
         {
-            cout << "There was an error getting response from server\r\n";
+            cout << "Error en comunicacion con el servidor\r\n";
         }
         else
         {
-            //		Display response
-            cout << "SERVER> " << string(buf, bytesReceived) << "\r\n";
+            //	Mostrar respuesta en terminal
+            cout << " > " << string(buf, data) << "\r\n";
         }
     } while(true);
 
-    //	Close the socket
+    // Cerrar el socket
     close(sock);
 
     return 0;
